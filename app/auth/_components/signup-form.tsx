@@ -27,7 +27,6 @@ import { createUserWithEmail } from "@/server/user";
 import { GoogleBtn } from "./google-btn";
 import { toast } from "sonner";
 import Loader from "@/components/global/loader";
-import { sendMail } from "@/server/email";
 
 export default function SignupForm({
   ...props
@@ -61,8 +60,8 @@ export default function SignupForm({
 
         toast.success("Account created successfully");
         router.push("/auth/sign-in");
-        
       } catch (error) {
+        console.error(error);
         toast.error("something went wrong");
       }
     });

@@ -35,7 +35,6 @@ export default function SigninForm({
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
 
-
   const form = useForm<signinSchemaType>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -46,25 +45,26 @@ export default function SigninForm({
 
   function onSubmit(data: signinSchemaType) {
     startTransition(async () => {
-         try {
-           const result = await loginUserWithEmail(data);
-   
-           if (!result.success) {
-             const errorMessage =
-               typeof result.error === "string"
-                 ? result.error
-                 : (result.error?.errors?.[0] ?? "An error occurred");
-             toast.error(errorMessage);
-             return;
-           }
-   
-           toast.success("login success");
-           router.push("/workspace");
-           router.refresh();
-         } catch (error) {
-           toast.error("something went wrong");
-         }
-       });
+      try {
+        const result = await loginUserWithEmail(data);
+
+        if (!result.success) {
+          const errorMessage =
+            typeof result.error === "string"
+              ? result.error
+              : (result.error?.errors?.[0] ?? "An error occurred");
+          toast.error(errorMessage);
+          return;
+        }
+
+        toast.success("login success");
+        router.push("/workspace");
+        router.refresh();
+      } catch (error) {
+        console.error(error);
+        toast.error("something went wrong");
+      }
+    });
   }
 
   return (
@@ -114,7 +114,7 @@ export default function SigninForm({
                       type={showPassword ? "text" : "password"}
                       required
                     />
-                    
+
                     <Button
                       className="absolute top-0 right-1 h-full px-3 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
