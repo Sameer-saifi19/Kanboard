@@ -1,8 +1,12 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import prisma from "@/lib/prisma";
-import { signupSchema, signupSchemaType } from "@/schema/auth-schema";
+import {
+  signinSchema,
+  signinSchemaType,
+  signupSchema,
+  signupSchemaType,
+} from "@/schema/auth-schema";
 import { APIError } from "better-auth/api";
 import z from "zod";
 
@@ -13,6 +17,7 @@ export const createUserWithEmail = async (data: signupSchemaType) => {
     if (!parsed.success) {
       return {
         success: false,
+        status: 409,
         error: z.treeifyError(parsed.error),
       };
     }
@@ -21,14 +26,13 @@ export const createUserWithEmail = async (data: signupSchemaType) => {
 
     await auth.api.signUpEmail({
       body: {
-        
         name,
         email,
         password,
       },
     });
 
-    return { success: true, status: 200 };
+    return { success: true, status: 201 };
   } catch (error) {
     if (error instanceof APIError) {
       return {
@@ -40,6 +44,42 @@ export const createUserWithEmail = async (data: signupSchemaType) => {
     return {
       success: false,
       error: "User creation failed",
+    };
+  }
+};
+
+export const loginUserWithEmail = async (data: signinSchemaType) => {
+  try {
+    const parsed = signinSchema.safeParse(data);
+
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: z.treeifyError(parsed.error),
+      };
+    }
+
+    const { email, password } = parsed.data;
+
+    await auth.api.signInEmail({
+      body: {
+        email,
+        password,
+      },
+    });
+
+    return { status: 200, success: true };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    return {
+      success: false,
+      error: "User login failed",
     };
   }
 };

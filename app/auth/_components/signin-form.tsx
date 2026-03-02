@@ -23,12 +23,13 @@ import { Controller, useForm } from "react-hook-form";
 import { signinSchema, signinSchemaType } from "@/schema/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoogleBtn } from "./google-btn";
+import { loginUserWithEmail } from "@/server/user";
+import { toast } from "sonner";
 
 export default function SigninForm({
   ...props
 }: React.ComponentProps<typeof Card>) {
-
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<signinSchemaType>({
@@ -40,7 +41,24 @@ export default function SigninForm({
   });
 
   function onSubmit(data: signinSchemaType) {
-   
+    try {
+      startTransition(async () => {
+        const result = await loginUserWithEmail(data);
+
+        if (!result.success) {
+          const errorMessage =
+            typeof result.error === "string"
+              ? result.error
+              : (result.error?.errors?.[0] ?? "An error occurred");
+          toast.error(errorMessage);
+          return;
+        }
+      });
+
+      toast.success("login Success");
+    } catch (error) {
+      toast.error("something went wrong");
+    }
   }
 
   return (
@@ -114,7 +132,7 @@ export default function SigninForm({
             <FieldGroup>
               <Field>
                 <Button type="submit">Login</Button>
-                <GoogleBtn/>
+                <GoogleBtn />
                 <FieldDescription className="px-6 text-center">
                   Don&apos;t have an account?{" "}
                   <Link href="/auth/sign-up">Sign up</Link>
