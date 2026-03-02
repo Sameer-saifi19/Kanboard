@@ -1,17 +1,14 @@
-import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 
 type LoaderProps = {
-    text: string
+    text?: string
 }
 
 export default function Loader({text}: LoaderProps) {
   return (
-    <div className="flex flex-col items-center gap-4">
-      <Button asChild variant="ghost" disabled size="sm">
+    <div className="flex items-center gap-4">
         <Spinner data-icon="inline-start" />
         {text}
-      </Button>
     </div>
   )
 }
