@@ -20,86 +20,40 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { signupSchema, signupSchemaType } from "@/schema/auth-schema";
+import { signinSchema, signinSchemaType } from "@/schema/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createUserWithEmail } from "@/server/user";
 import { GoogleBtn } from "./google-btn";
-import { toast } from "sonner";
-import Loader from "@/components/global/loader";
-import { useRouter } from "next/navigation";
 
-export default function SignupForm({
+export default function SigninForm({
   ...props
 }: React.ComponentProps<typeof Card>) {
 
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition()
   const [showPassword, setShowPassword] = useState(false);
-  
-  const router = useRouter()
-  
-  const form = useForm<signupSchemaType>({
-    resolver: zodResolver(signupSchema),
+
+  const form = useForm<signinSchemaType>({
+    resolver: zodResolver(signinSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(data: signupSchemaType) {
-    startTransition(async () => {
-      try {
-        const result = await createUserWithEmail(data);
-
-        if (!result.success) {
-          const errorMessage =
-            typeof result.error === "string"
-              ? result.error
-              : (result.error?.errors?.[0] ?? "An error occurred");
-          toast.error(errorMessage);
-          return;
-        }
-
-        toast.success("Account created successfully");
-        router.push('/auth/sign-in')
-      } catch (error) {
-        toast.error("something went wrong");
-      }
-    });
+  function onSubmit(data: signinSchemaType) {
+   
   }
 
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
+        <CardTitle>Log in to account</CardTitle>
         <CardDescription>
-          Enter your information below to create your account
+          Enter your information below to continue to prodSaas
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                  <Input
-                    {...field}
-                    id="name"
-                    type="text"
-                    placeholder="John Doe"
-                    required
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
             <Controller
               name="email"
               control={form.control}
@@ -159,11 +113,11 @@ export default function SignupForm({
 
             <FieldGroup>
               <Field>
-                <Button type="submit" disabled={isPending} >{isPending ? <Loader text="Creating..."/> : "Create account"}</Button>
-                <GoogleBtn signUp />
+                <Button type="submit">Login</Button>
+                <GoogleBtn/>
                 <FieldDescription className="px-6 text-center">
-                  Already have an account?{" "}
-                  <Link href="/auth/sign-in">Sign in</Link>
+                  Don&apos;t have an account?{" "}
+                  <Link href="/auth/sign-up">Sign up</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
