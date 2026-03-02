@@ -30,7 +30,6 @@ export const createUserWithEmail = async (data: signupSchemaType) => {
         name,
         email,
         password,
-        callbackURL: "/auth/sign-in"
       },
     });
 
@@ -67,7 +66,6 @@ export const loginUserWithEmail = async (data: signinSchemaType) => {
       body: {
         email,
         password,
-        callbackURL: "/workspace"
       },
 
       headers: await headers()
