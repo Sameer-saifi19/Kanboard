@@ -2,6 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import {
+  resetPasswordSchema,
+  resetPasswordSchemaType,
   signinSchema,
   signinSchemaType,
   signupSchema,
@@ -68,7 +70,7 @@ export const loginUserWithEmail = async (data: signinSchemaType) => {
         password,
       },
 
-      headers: await headers()
+      headers: await headers(),
     });
 
     return { status: 200, success: true };
@@ -85,4 +87,26 @@ export const loginUserWithEmail = async (data: signinSchemaType) => {
       error: "User login failed",
     };
   }
+};
+
+export const resetUserPassword = async (data: resetPasswordSchemaType) => {
+  try {
+    const parsed = resetPasswordSchema.safeParse(data);
+
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: z.treeifyError(parsed.error),
+      };
+    }
+
+    const { password } = parsed.data;
+
+    await auth.api.resetPassword({
+      body: {
+        newPassword: password,
+        token
+      }
+    })
+  } catch (error) {}
 };

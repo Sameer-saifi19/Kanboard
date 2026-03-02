@@ -21,14 +21,20 @@ export const auth = betterAuth({
     requireEmailVerification: true,
     minPasswordLength: 8,
     autoSignIn: false,
+    sendResetPassword: async ({ user, url }) => {
+      await sendMail(user.email, "Reset your password", url);
+    },
   },
-  emailVerification:{
+  emailVerification: {
     sendOnSignUp: true,
     expiresIn: 60 * 60,
     autoSignInAfterVerification: true,
-    sendVerificationEmail: async ({user, url}) => {
-      await sendMail(user.email, "Let's get started")
-    }
+    sendVerificationEmail: async ({ user, url }) => {
+      const link = new URL(url);
+      link.searchParams.set("callbackURL", "/workspace");
+
+      await sendMail(user.email, "Let's get started", String(url));
+    },
   },
   advanced: {
     database: {
