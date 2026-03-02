@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -26,17 +27,14 @@ import { createUserWithEmail } from "@/server/user";
 import { GoogleBtn } from "./google-btn";
 import { toast } from "sonner";
 import Loader from "@/components/global/loader";
-import { useRouter } from "next/navigation";
 
 export default function SignupForm({
   ...props
 }: React.ComponentProps<typeof Card>) {
-
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
-  
-  const router = useRouter()
-  
+
   const form = useForm<signupSchemaType>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -61,7 +59,8 @@ export default function SignupForm({
         }
 
         toast.success("Account created successfully");
-        router.push('/auth/sign-in')
+        router.push("/auth/sign-in");
+        router.refresh();
       } catch (error) {
         toast.error("something went wrong");
       }
@@ -159,7 +158,9 @@ export default function SignupForm({
 
             <FieldGroup>
               <Field>
-                <Button type="submit" disabled={isPending} >{isPending ? <Loader text="Creating..."/> : "Create account"}</Button>
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? <Loader text="Creating..." /> : "Create account"}
+                </Button>
                 <GoogleBtn signUp />
                 <FieldDescription className="px-6 text-center">
                   Already have an account?{" "}

@@ -8,6 +8,7 @@ import {
   signupSchemaType,
 } from "@/schema/auth-schema";
 import { APIError } from "better-auth/api";
+import { headers } from "next/headers";
 import z from "zod";
 
 export const createUserWithEmail = async (data: signupSchemaType) => {
@@ -29,6 +30,7 @@ export const createUserWithEmail = async (data: signupSchemaType) => {
         name,
         email,
         password,
+        callbackURL: "/auth/sign-in"
       },
     });
 
@@ -65,7 +67,10 @@ export const loginUserWithEmail = async (data: signinSchemaType) => {
       body: {
         email,
         password,
+        callbackURL: "/workspace"
       },
+
+      headers: await headers()
     });
 
     return { status: 200, success: true };

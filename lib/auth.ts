@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
 import prisma from "./prisma";
 
 export const auth = betterAuth({
@@ -22,13 +23,14 @@ export const auth = betterAuth({
       generateId: false,
     },
   },
-  session:{
-    expiresIn: 24 * 60 * 60
+  session: {
+    expiresIn: 24 * 60 * 60,
   },
-  account:{
+  account: {
     accountLinking: {
       enabled: true,
-      trustedProviders: ["google"]
-    }
-  }
+      trustedProviders: ["google"],
+    },
+  },
+  plugins: [nextCookies()],
 });

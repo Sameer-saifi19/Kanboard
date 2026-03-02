@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -25,12 +26,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GoogleBtn } from "./google-btn";
 import { loginUserWithEmail } from "@/server/user";
 import { toast } from "sonner";
+import Loader from "@/components/global/loader";
 
 export default function SigninForm({
   ...props
 }: React.ComponentProps<typeof Card>) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
+
 
   const form = useForm<signinSchemaType>({
     resolver: zodResolver(signinSchema),
@@ -41,24 +45,26 @@ export default function SigninForm({
   });
 
   function onSubmit(data: signinSchemaType) {
-    try {
-      startTransition(async () => {
-        const result = await loginUserWithEmail(data);
-
-        if (!result.success) {
-          const errorMessage =
-            typeof result.error === "string"
-              ? result.error
-              : (result.error?.errors?.[0] ?? "An error occurred");
-          toast.error(errorMessage);
-          return;
-        }
-      });
-
-      toast.success("login Success");
-    } catch (error) {
-      toast.error("something went wrong");
-    }
+    startTransition(async () => {
+         try {
+           const result = await loginUserWithEmail(data);
+   
+           if (!result.success) {
+             const errorMessage =
+               typeof result.error === "string"
+                 ? result.error
+                 : (result.error?.errors?.[0] ?? "An error occurred");
+             toast.error(errorMessage);
+             return;
+           }
+   
+           toast.success("login success");
+           router.push("/workspace");
+           router.refresh();
+         } catch (error) {
+           toast.error("something went wrong");
+         }
+       });
   }
 
   return (
@@ -108,9 +114,7 @@ export default function SigninForm({
                       type={showPassword ? "text" : "password"}
                       required
                     />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
+                    
                     <Button
                       className="absolute top-0 right-1 h-full px-3 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
@@ -131,7 +135,9 @@ export default function SigninForm({
 
             <FieldGroup>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? <Loader text="signing in..." /> : "Sign in"}
+                </Button>
                 <GoogleBtn />
                 <FieldDescription className="px-6 text-center">
                   Don&apos;t have an account?{" "}
