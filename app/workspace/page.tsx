@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { SignOutButton } from "../auth/_components/sign-out";
 
 export default async function Page() {
@@ -8,9 +7,6 @@ export default async function Page() {
     headers: await headers(),
   });
 
-  if (!session) {
-    redirect("/auth/sign-in");
-  }
   return (
     <>
       <div className="flex flex-col space-y-6 items-center justify-center h-screen">
