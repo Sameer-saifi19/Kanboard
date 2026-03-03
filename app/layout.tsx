@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 const inter = Inter({
   variable: "--font-primary",
   subsets: ["latin"],
-  display: "swap"
-})
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,11 +22,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} antialiased `}
-      >
-        {children}
-        <Toaster richColors duration={2500} position="bottom-right"/>
+      <body className={`${inter.variable} antialiased `}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster richColors duration={2500} position="bottom-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

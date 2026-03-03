@@ -16,7 +16,7 @@ export default function DashboardNavbar() {
   const { setTheme } = useTheme();
   return (
     <>
-      <nav className="p-4 flex bg-sidebar-primary-foreground border-b items-center justify-between sticky top-0 z-10">
+      <nav className="p-4 flex bg-sidebar border-b items-center justify-between sticky top-0 z-10">
         <SidebarTrigger />
         <div className="flex items-center gap-4">
           {/* THEME MENU */}
