@@ -7,6 +7,11 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  user:{
+    deleteUser:{
+      enabled: true
+    }
+  },
   baseURL: process.env.BETTER_AUTH_URL,
   socialProviders: {
     google: {

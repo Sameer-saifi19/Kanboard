@@ -13,9 +13,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
 import { removeUserImage, updateUserImage } from "@/server/user";
 import { Loader2, Pencil, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -35,6 +37,8 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
   const [isUploading, setIsUploading] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const router = useRouter();
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -114,6 +118,15 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
       toast.success("Avatar removed");
     }
     setIsRemoving(false);
+  }
+
+  async function handleDeleteUser() {
+    try {
+      authClient.deleteUser();
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -242,7 +255,60 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
           </CardContent>
         </Card>
 
-        <Card></Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Account Security</CardTitle>
+            <CardDescription>Manage your account security</CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-8">
+            <div className="flex justify-between items-center">
+              <Input
+                type="password"
+                disabled
+                placeholder="**************"
+                className="w-1/2 bg-muted"
+              />
+              <Button variant={"outline"}>Change Password</Button>
+            </div>
+
+            <div className="flex justify-between">
+              <div className="space-y-2">
+                <h4 className="text-md leading-none font-semibold">
+                  2-step verification
+                </h4>
+                <p className="text-xs text-muted-foreground">
+                  Add an additional security to your account
+                </p>
+              </div>
+              <div>
+                <Switch />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-red-500">Danger Zone</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <CardTitle>Delete my account</CardTitle>
+                <CardDescription>
+                  Permanently delete the account and remove access from all
+                  workspaces.
+                </CardDescription>
+              </div>
+              <div>
+                <Button variant={"destructive"} onClick={handleDeleteUser}>
+                  Delete Account
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </>
   );

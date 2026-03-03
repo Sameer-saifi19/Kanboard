@@ -28,18 +28,8 @@ export const personalMenuItems = (
   id: string,
 ): { title: string; url: string; icon: React.ReactNode }[] => [
   {
-    title: "Profile and Visibility",
+    title: "Profile and account",
     url: `/u/${id}/profile`,
     icon: <UserCircle2Icon />,
-  },
-  {
-    title: "Account",
-    url: `/u/${id}/account`,
-    icon: <SquareUserRound />,
-  },
-  {
-    title: "Settings",
-    url: `/u/${id}/setting`,
-    icon: <UserCog2 />,
   },
 ];
