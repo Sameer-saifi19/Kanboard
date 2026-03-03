@@ -6,7 +6,7 @@ export default async function Page() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
+  
   return (
     <>
       <main className="flex flex-col gap-6 p-4 w-full max-7-wxl">
@@ -17,7 +17,7 @@ export default async function Page() {
           </p>
         </div>
         <ProfileClient
-          imageUrl={session?.user.image ?? "https://wallpapers.com/images/hd/placeholder-profile-icon-8qmjk1094ijhbem9.jpg"}
+          imageUrl={session?.user.image as string}
           email={session?.user.email as string}
           initialName={session?.user.name as string}
         />
