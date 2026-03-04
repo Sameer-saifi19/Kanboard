@@ -8,7 +8,33 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const SignOutButton = () => {
+interface Props {
+  size?:
+    | "default"
+    | "xs"
+    | "sm"
+    | "lg"
+    | "icon"
+    | "icon-xs"
+    | "icon-sm"
+    | "icon-lg"
+    | null
+    | undefined;
+  variant?:
+    | "default"
+    | "link"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | null
+    | undefined;
+}
+
+export const SignOutButton = ({
+  size,
+  variant,
+}: Props) => {
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
 
@@ -35,11 +61,12 @@ export const SignOutButton = () => {
   return (
     <Button
       onClick={handleClick}
-      variant="destructive"
+      variant={variant}
       disabled={isPending}
       className="cursor-pointer"
+      size={size}
     >
-      <LogOut className="h-[1.2rem] w-[1.2rem]" />
+      <LogOut />
       {isPending ? <Loader /> : "sign out"}
     </Button>
   );
