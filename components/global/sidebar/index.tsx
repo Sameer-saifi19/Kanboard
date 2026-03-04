@@ -12,6 +12,7 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
+import WorkspaceSwitch from "../workspace-switch";
 
 type Props = {
   activeOrganizationId: string;
@@ -30,8 +31,8 @@ export default function DashboardSidebar({
       <Sidebar collapsible="icon">
         <SidebarHeader className="p-4">
             <Link href={process.env.NEXT_PUBLIC_APP_URL!} className="flex items-center gap-2">
-              <h1 className="uppercase tracking-wider text-primary text-2xl font-extrabold">
-                Kanboard
+              <h1 className="uppercase tracking-wider text-primary text-2xl font-extrabold mb-2">
+                {open ? "Kanboard" : "K"}
               </h1>
             </Link>
         </SidebarHeader>
@@ -40,6 +41,7 @@ export default function DashboardSidebar({
           <SidebarGroup className="space-y-2">
             <SidebarGroupLabel>Workspace</SidebarGroupLabel>
             <SidebarMenu>
+              <WorkspaceSwitch/>
               {workspaceItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>

@@ -14,6 +14,7 @@ import { authClient } from "@/lib/auth-client";
 import { createInitials } from "@/utils/initial-extractor";
 import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 export default function DashboardNavbar() {
   const { setTheme } = useTheme();
@@ -73,12 +74,20 @@ export default function DashboardNavbar() {
                 </div>
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col">
-                    <h4 className="text-md font-semibold">{session?.user.name}</h4>
-                    <p className="text-md text-muted-foreground">{session?.user.email}</p>
+                    <h4 className="text-md font-semibold">
+                      {session?.user.name}
+                    </h4>
+                    <p className="text-md text-muted-foreground">
+                      {session?.user.email}
+                    </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant={"outline"} size={"sm"}><Settings/> Manage Account</Button>
-                    <SignOutButton size={"sm"} variant={"outline"}/>
+                    <Button variant={"outline"} size={"sm"} className="flex">
+                      <Link href={`/u/${session?.user.name.replace(/\s+/g, "-")}/profile`} className="flex items-center gap-2">
+                        <Settings /> Manage Account
+                      </Link>
+                    </Button>
+                    <SignOutButton size={"sm"} variant={"outline"} />
                   </div>
                 </div>
               </div>
