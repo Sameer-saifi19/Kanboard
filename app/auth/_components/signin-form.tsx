@@ -27,6 +27,7 @@ import { GoogleBtn } from "./google-btn";
 import { loginUserWithEmail } from "@/server/user";
 import { toast } from "sonner";
 import Loader from "@/components/global/loader";
+import { authClient } from "@/lib/auth-client";
 
 export default function SigninForm({
   ...props
@@ -34,7 +35,7 @@ export default function SigninForm({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
-
+  const {data: useActiveWorkpace} = authClient.useActiveOrganization()
   const form = useForm<signinSchemaType>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -58,8 +59,7 @@ export default function SigninForm({
         }
 
         toast.success("login success");
-        router.push("/workspace");
-        router.refresh();
+        router.push(`/w/${useActiveWorkpace?.slug}/projects`);
       } catch (error) {
         console.error(error);
         toast.error("something went wrong");

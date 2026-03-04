@@ -7,6 +7,8 @@ import {
   createWorkspaceOnSignup,
   verifyAccessToWorkspace,
 } from "@/server/workspace";
+import { redirect } from "next/navigation";
+import { useActiveWorkspace } from "@/utils/useActiveworkspace";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -34,7 +36,7 @@ export const auth = betterAuth({
         after: async (session) => {
           const access = await verifyAccessToWorkspace();
 
-          const setActive = await prisma.session.update({
+          await prisma.session.update({
             where: {
               id: session.id,
             },
