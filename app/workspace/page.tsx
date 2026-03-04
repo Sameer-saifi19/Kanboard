@@ -6,7 +6,6 @@ export default async function Page() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
   return (
     <>
       <div className="flex flex-col space-y-6 items-center justify-center h-screen">

@@ -12,15 +12,16 @@ type Props = {
 
 const DashboardLayout = ({ children }: Props) => {
   const { data: session } = authClient.useSession();
+  const { data: activeOrganization } = authClient.useActiveOrganization();
   return (
     <div>
       <SidebarProvider>
         <DashboardSidebar
-          userId={session?.user.id as string}
-          activeOrganizationId={"hello"}
+          userId={session?.user.name.replace(/\s+/g, "-") as string}
+          activeOrganizationId={activeOrganization?.slug as string}
         />
         <main className="min-w-0 flex-1">
-          <DashboardNavbar/>
+          <DashboardNavbar />
           <div className="px-12 flex items-center justify-center py-8">
             {children}
           </div>
