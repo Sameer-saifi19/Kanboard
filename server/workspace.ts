@@ -121,6 +121,8 @@ export const createNewWorkspace = async ({
       };
     }
 
+    revalidatePath(`/w/${response.slug}`, "layout")
+
     return {
       success: true,
       data: response,

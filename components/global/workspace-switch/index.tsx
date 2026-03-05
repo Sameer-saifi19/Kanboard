@@ -12,34 +12,46 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { Building } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function WorkspaceSwitch() {
-  const { data: workspaces, isPending, refetch } = authClient.useListOrganizations();
-  const { data: activeOrganization } = authClient.useActiveOrganization();
+  const {
+    data: workspaces,
+    isPending,
+    refetch,
+  } = authClient.useListOrganizations();
+
+  const { data: activeOrganization } =
+    authClient.useActiveOrganization();
+
   const router = useRouter();
-  
-  if (isPending) {
-    return (
-      <div className="w-full max-w-2xl h-10 flex items-center text-sm text-muted-foreground">
-        Loading workspaces...
-      </div>
-    );
-  }
+
+  useEffect(() => {
+    if (activeOrganization) {
+      refetch();
+    }
+  }, [activeOrganization, refetch]);
 
   return (
     <Select
       value={activeOrganization?.id}
       onValueChange={async (orgId) => {
-        const data = await authClient.organization.setActive({
+        const res = await authClient.organization.setActive({
           organizationId: orgId,
         });
-        refetch()
-        router.push(`/w/${data.data?.slug}/projects`)
+
+        if (res?.data?.slug) {
+          router.push(`/w/${res.data.slug}/projects`);
+        }
       }}
     >
       <SelectTrigger className="w-full max-w-2xl">
         <SelectValue
-          placeholder={activeOrganization?.name || "Select workspace"}
+          placeholder={
+            isPending
+              ? "Loading workspaces..."
+              : activeOrganization?.name || "Select workspace"
+          }
         />
       </SelectTrigger>
 
@@ -54,7 +66,6 @@ export default function WorkspaceSwitch() {
             </SelectItem>
           ))}
 
-          {/* Create new workspace */}
           <CreateWorkspaceDialog />
         </SelectGroup>
       </SelectContent>
