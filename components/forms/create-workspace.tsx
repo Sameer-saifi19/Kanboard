@@ -13,8 +13,13 @@ import { generateSlug } from "@/utils/slug-generator";
 import { createNewWorkspace } from "@/server/workspace";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { organization } from "@/lib/auth-client";
 
-export default function CreateWorkspaceForm() {
+interface CreateWorkspaceFormProps {
+  onCreated?: () => void;
+}
+
+export default function CreateWorkspaceForm({ onCreated }: CreateWorkspaceFormProps) {
   const form = useForm<createWorkspaceSchemaType>({
     resolver: zodResolver(createWorkspaceSchema),
     defaultValues: {
@@ -34,7 +39,7 @@ export default function CreateWorkspaceForm() {
   }, [slugFormat, form]);
 
   const [isPending, startTransition] = useTransition();
-  const router = useRouter()
+  const router = useRouter();
   function onSubmit(data: createWorkspaceSchemaType) {
     startTransition(async () => {
       try {
@@ -44,9 +49,21 @@ export default function CreateWorkspaceForm() {
           toast.error(createResult.error ?? "Error creating workspace");
           return;
         }
-        
+
+        // Set the newly created workspace as active so the switch updates immediately
+        if (createResult.data?.id) {
+          await organization.setActive({
+            organizationId: createResult.data.id,
+          });
+        }
+
         toast.success("New workspace created");
-        router.push(`/w/${createResult.data?.slug}/projects`)
+
+        if (onCreated) {
+          onCreated();
+        }
+
+        router.push(`/w/${createResult.data?.slug}/projects`);
       } catch (error) {
         toast.error("Something went wrong");
       }
