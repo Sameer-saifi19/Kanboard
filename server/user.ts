@@ -146,3 +146,41 @@ export const removeUserImage = async () => {
   revalidatePath("/profile");
   return { success: true };
 };
+
+export const findOrgSlugById = async () => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    const activeOrgId = session?.session.activeOrganizationId;
+
+    if (!activeOrgId) {
+      return { success: false };
+    }
+
+    const data = await prisma.organization.findUnique({
+      where: {
+        id: activeOrgId,
+      },
+    });
+
+    if (!data) {
+      return { success: false };
+    }
+
+    return { success: true, data: data };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    return {
+      success: false,
+      error: "something went wrong",
+    };
+  }
+};

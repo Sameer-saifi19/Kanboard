@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { generateSlug } from "@/utils/slug-generator";
 import { createNewWorkspace } from "@/server/workspace";
 import { toast } from "sonner";
-import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 
 export default function CreateWorkspaceForm() {

@@ -35,6 +35,7 @@ export default function SigninForm({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
+  
   const {data: useActiveWorkpace} = authClient.useActiveOrganization()
   const form = useForm<signinSchemaType>({
     resolver: zodResolver(signinSchema),
@@ -59,7 +60,7 @@ export default function SigninForm({
         }
 
         toast.success("login success");
-        router.push(`/w/${useActiveWorkpace?.slug}/projects`);
+        router.push(`/w`);
       } catch (error) {
         console.error(error);
         toast.error("something went wrong");
