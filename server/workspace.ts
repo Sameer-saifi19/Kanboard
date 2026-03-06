@@ -6,6 +6,7 @@ import { createWorkspaceSchemaType } from "@/schema/workspace-schema";
 import { APIError } from "better-auth/api";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 interface Props {
   name: string;
@@ -157,7 +158,7 @@ export const removeWorkspaceImage = async () => {
   if (!session?.user) return { error: "Not authenticated" };
 
   await prisma.organization.update({
-    where: { id: session.session.activeOrganizationId as string},
+    where: { id: session.session.activeOrganizationId as string },
     data: {
       logo: null,
     },
@@ -181,6 +182,32 @@ export const getFullWorkspace = async () => {
     }
 
     return { success: true, data: data };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    return {
+      success: false,
+      error: "Something went wrong",
+    };
+  }
+};
+
+export const redirectAfterDelete = async () => {
+  try {
+    const organizations = await auth.api.listOrganizations({
+      headers: await headers(),
+    });
+
+
+
+    revalidatePath(`/w/${organizations[0].slug}`, "layout");
+
+    return { data: organizations, success: true };
   } catch (error) {
     if (error instanceof APIError) {
       return {

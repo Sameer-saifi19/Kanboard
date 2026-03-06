@@ -5,6 +5,7 @@ import { organization } from "better-auth/plugins";
 import prisma from "./prisma";
 import {
   createWorkspaceOnSignup,
+  redirectAfterDelete,
   verifyAccessToWorkspace,
 } from "@/server/workspace";
 import { redirect } from "next/navigation";

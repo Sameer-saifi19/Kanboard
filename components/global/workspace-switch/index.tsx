@@ -53,7 +53,7 @@ export default function WorkspaceSwitch() {
               placeholder={
                 isPending
                   ? "Loading workspaces..."
-                  : activeOrganization?.name || "Select workspace"
+                  : activeOrganization?.name || "Select a workspace"
               }
             />
           </SelectTrigger>

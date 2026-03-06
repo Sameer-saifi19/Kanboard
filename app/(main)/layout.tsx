@@ -13,6 +13,7 @@ type Props = {
 const DashboardLayout = ({ children }: Props) => {
   const { data: session } = authClient.useSession();
   const { data: activeOrganization } = authClient.useActiveOrganization();
+  
   return (
     <div>
       <SidebarProvider>

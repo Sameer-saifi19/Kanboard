@@ -1,9 +1,11 @@
+'use client'
+
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Loader from "../global/loader";
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import {
   createWorkspaceSchema,
   createWorkspaceSchemaType,
@@ -29,16 +31,6 @@ export default function CreateWorkspaceForm({
       slug: "",
     },
   });
-
-  const slugFormat = form.watch("name");
-
-  useEffect(() => {
-    if (slugFormat) {
-      form.setValue("slug", generateSlug(slugFormat), {
-        shouldValidate: true,
-      });
-    }
-  }, [slugFormat, form]);
 
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -94,6 +86,14 @@ export default function CreateWorkspaceForm({
                   type="text"
                   required
                   placeholder="Workspace name"
+                  onChange={(e) => {
+                    field.onChange(e);
+
+                    const slug = generateSlug(e.target.value);
+                    form.setValue("slug", slug, {
+                      shouldValidate: true,
+                    });
+                  }}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />

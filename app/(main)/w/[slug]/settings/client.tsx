@@ -1,5 +1,6 @@
 "use client";
 
+import AlertDialogBox from "@/components/modals/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +36,7 @@ export default function SettingsClient({
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(workspaceName);
-  const [inputSlug, setInputSlug] = useState(slug)
+  const [inputSlug, setInputSlug] = useState(slug);
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -95,11 +96,11 @@ export default function SettingsClient({
 
     setIsLoading(true);
     const result = await authClient.organization.update({
-      organizationId: workspaceId, 
-      data :{
+      organizationId: workspaceId,
+      data: {
         name,
-        slug: inputSlug
-      }
+        slug: inputSlug,
+      },
     });
     setIsLoading(false);
 
@@ -125,10 +126,10 @@ export default function SettingsClient({
 
   async function handleDeleteWorkspace() {
     try {
-      authClient.organization.delete({
+      await authClient.organization.delete({
         organizationId: workspaceId,
       });
-      router.push("/");
+      router.push("/w/redirecting");
     } catch (error) {
       console.error(error);
     }
@@ -239,8 +240,7 @@ export default function SettingsClient({
                       ? "bg-muted cursor-default disabled:text-black-900"
                       : ""
                   }
-                >
-                </Input>
+                ></Input>
               </div>
             </div>
 
@@ -260,6 +260,30 @@ export default function SettingsClient({
                 )}
               </Button>
             )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-red-400">Danger Zone</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <CardTitle>Delete Workspace</CardTitle>
+                <CardDescription>
+                  Deleting this workspace will remove all associated data.
+                </CardDescription>
+              </div>
+              <div>
+                <AlertDialogBox
+                  btnText="Delete workspace"
+                  title="Are you sure to delete workspace"
+                  description="Deleting this workspace will also delete all the associated data"
+                  handleDelete={handleDeleteWorkspace}
+                />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
