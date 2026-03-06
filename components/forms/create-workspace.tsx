@@ -19,7 +19,9 @@ interface CreateWorkspaceFormProps {
   onCreated?: () => void;
 }
 
-export default function CreateWorkspaceForm({ onCreated }: CreateWorkspaceFormProps) {
+export default function CreateWorkspaceForm({
+  onCreated,
+}: CreateWorkspaceFormProps) {
   const form = useForm<createWorkspaceSchemaType>({
     resolver: zodResolver(createWorkspaceSchema),
     defaultValues: {
@@ -46,11 +48,17 @@ export default function CreateWorkspaceForm({ onCreated }: CreateWorkspaceFormPr
         const createResult = await createNewWorkspace(data);
 
         if (!createResult.success) {
-          toast.error(createResult.error ?? "Error creating workspace");
+          if (createResult.error === "Organization slug already taken") {
+            form.setError("slug", {
+              type: "server",
+              message: "slug is taken! use a different one",
+            });
+          } else {
+            toast.error(createResult.error ?? "Error creating workspace");
+          }
           return;
         }
 
-        // Set the newly created workspace as active so the switch updates immediately
         if (createResult.data?.id) {
           await organization.setActive({
             organizationId: createResult.data.id,
@@ -86,7 +94,6 @@ export default function CreateWorkspaceForm({ onCreated }: CreateWorkspaceFormPr
                   type="text"
                   required
                   placeholder="Workspace name"
-                  autoComplete="off"
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -106,7 +113,6 @@ export default function CreateWorkspaceForm({ onCreated }: CreateWorkspaceFormPr
                   type="text"
                   required
                   placeholder="my-org"
-                  autoComplete="off"
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />

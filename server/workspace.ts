@@ -109,9 +109,19 @@ export const createNewWorkspace = async ({
   slug,
 }: createWorkspaceSchemaType) => {
   try {
+    const checkSlug = await auth.api.checkOrganizationSlug({
+      body: {
+        slug,
+      },
+    });
+
+    if (!checkSlug) {
+      return { success: false, error: "slug is taken! use a different one" };
+    }
+
     const response = await auth.api.createOrganization({
       body: { name, slug, keepCurrentActiveOrganization: false },
-      headers: await headers()
+      headers: await headers(),
     });
 
     if (!response) {
@@ -121,12 +131,56 @@ export const createNewWorkspace = async ({
       };
     }
 
-    revalidatePath(`/w/${response.slug}`, "layout")
+    revalidatePath(`/w/${response.slug}`, "layout");
 
     return {
       success: true,
       data: response,
     };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    return {
+      success: false,
+      error: "Something went wrong",
+    };
+  }
+};
+
+export const removeWorkspaceImage = async () => {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) return { error: "Not authenticated" };
+
+  await prisma.organization.update({
+    where: { id: session.user.id },
+    data: {
+      logo: null,
+    },
+  });
+
+  revalidatePath("/profile");
+  return { success: true };
+};
+
+export const getFullWorkspace = async () => {
+  try {
+    const data = await auth.api.getFullOrganization({
+      query: {
+        membersLimit: 100,
+      },
+      headers: await headers(),
+    });
+
+    if (!data) {
+      return { success: false };
+    }
+
+    return { success: true, data: data };
   } catch (error) {
     if (error instanceof APIError) {
       return {

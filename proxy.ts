@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
 
-const protectedPrefixes = ["/workspace", "/user",];
+const protectedPrefixes = ["/w", "/u",];
 
 export async function proxy(req: NextRequest) {
   const { nextUrl } = req;
@@ -21,7 +21,7 @@ export async function proxy(req: NextRequest) {
   }
 
   if (isOnAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/w", req.url));
   }
 
   return res;

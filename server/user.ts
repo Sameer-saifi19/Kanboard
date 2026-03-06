@@ -134,6 +134,50 @@ export const updateUserImage = async (formData: FormData) => {
   }
 };
 
+export const updateWorkspaceImage = async (formData: FormData) => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) return { message: "Not authenticated" };
+
+    const file = formData.get("file") as File;
+
+    if (!file || file.size === 0) return { error: "No file provided" };
+    if (!file.type.startsWith("image/")) return { error: "Must be an image" };
+    if (file.size > 2 * 1024 * 1024) return { error: "Max size is 2MB" };
+
+    const bytes = await file.arrayBuffer();
+    const base64 = `data:${file.type};base64,${Buffer.from(bytes).toString("base64")}`;
+
+    const result = await cloudinary.uploader.upload(base64, {
+      folder: "user-avatars",
+      public_id: `user-${session.user.id}`,
+      overwrite: true,
+      transformation: [
+        { width: 400, height: 400, crop: "fill", gravity: "face" },
+        { quality: "auto" },
+      ],
+    });
+
+    await prisma.organization.update({
+      where: {
+        id: session.session.activeOrganizationId as string,
+      },
+      data: {
+        logo: result.secure_url,
+      },
+    });
+
+    revalidatePath("/profile");
+    return { success: true, url: result.secure_url };
+  } catch (error) {
+    console.error(error);
+    return { status: 500, success: false };
+  }
+};
+
 export const removeUserImage = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { error: "Not authenticated" };

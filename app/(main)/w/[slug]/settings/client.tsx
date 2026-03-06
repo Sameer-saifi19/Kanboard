@@ -12,24 +12,30 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
-import { removeUserImage, updateUserImage } from "@/server/user";
+import { updateWorkspaceImage } from "@/server/user";
+import { removeWorkspaceImage } from "@/server/workspace";
 import { Loader2, Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 interface Props {
-  imageUrl: string | undefined;
-  initialName: string;
-  email: string;
+  workspaceName: string;
+  slug: string;
+  workspaceId: string;
+  imageUrl: string;
 }
 
-export default function ProfileClient({ imageUrl, initialName, email }: Props) {
+export default function SettingsClient({
+  workspaceName,
+  slug,
+  imageUrl,
+  workspaceId,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(initialName);
+  const [name, setName] = useState(workspaceName);
+  const [inputSlug, setInputSlug] = useState(slug)
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -56,7 +62,7 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
       const formData = new FormData();
       formData.append("file", file);
 
-      const result = await updateUserImage(formData);
+      const result = await updateWorkspaceImage(formData);
 
       if (result.error) throw new Error(result.error);
 
@@ -77,40 +83,37 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
   }
 
   function handleCancel() {
-    setName(initialName);
+    setName(workspaceName);
     setIsEditing(false);
   }
 
   async function handleSave() {
-    if (name === initialName) {
+    if (name === workspaceName) {
       setIsEditing(false);
       return;
     }
 
     setIsLoading(true);
-    const result = await authClient.updateUser({
-      name: name,
+    const result = await authClient.organization.update({
+      organizationId: workspaceId, 
+      data :{
+        name,
+        slug: inputSlug
+      }
     });
     setIsLoading(false);
 
     if (result.error) {
       toast.error(result.error.message || "An error occurred");
     } else {
-      toast.success("Profile updated!");
+      toast.success("Workspace updated!");
       setIsEditing(false);
     }
   }
 
-  const initials = initialName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-
   async function handleRemove() {
     setIsRemoving(true);
-    const result = await removeUserImage();
+    const result = await removeWorkspaceImage();
     if (result.error) {
       toast.error(result.error);
     } else {
@@ -120,9 +123,11 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
     setIsRemoving(false);
   }
 
-  async function handleDeleteUser() {
+  async function handleDeleteWorkspace() {
     try {
-      authClient.deleteUser();
+      authClient.organization.delete({
+        organizationId: workspaceId,
+      });
       router.push("/");
     } catch (error) {
       console.error(error);
@@ -136,7 +141,7 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
           <CardHeader>
             <CardTitle className="text-base">General</CardTitle>
             <CardDescription className="text-sm text-muted-foreground">
-              General settings for user.
+              General settings for your workspace.
             </CardDescription>
             <CardAction>
               {!isEditing ? (
@@ -152,7 +157,7 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
               )}
             </CardAction>
           </CardHeader>
-          <Separator />
+
           <CardContent className="space-y-6">
             <input
               ref={fileInputRef}
@@ -166,7 +171,7 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
                 <Avatar className="w-18 h-18">
                   <AvatarImage src={preview ?? undefined} />
                   <AvatarFallback className="text-4xl font-semibold">
-                    {initials}
+                    <h1 className="font-bold text-4xl">W</h1>
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -223,16 +228,19 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="slug">slug</Label>
                 <Input
-                  id="email"
-                  value={email}
-                  disabled
-                  className="bg-muted cursor-default"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Email cannot be changed
-                </p>
+                  id="slug"
+                  disabled={!isEditing}
+                  value={inputSlug}
+                  onChange={(e) => setInputSlug(e.target.value)}
+                  className={
+                    !isEditing
+                      ? "bg-muted cursor-default disabled:text-black-900"
+                      : ""
+                  }
+                >
+                </Input>
               </div>
             </div>
 
@@ -252,61 +260,6 @@ export default function ProfileClient({ imageUrl, initialName, email }: Props) {
                 )}
               </Button>
             )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Account Security</CardTitle>
-            <CardDescription>Manage your account security</CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-8">
-            <div className="flex justify-between items-center">
-              <Input
-                type="password"
-                disabled
-                placeholder="**************"
-                className="w-1/2 bg-muted"
-              />
-              <Button variant={"outline"}>Change Password</Button>
-            </div>
-
-            <div className="flex justify-between">
-              <div className="space-y-2">
-                <h4 className="text-md leading-none font-semibold">
-                  2-step verification
-                </h4>
-                <p className="text-xs text-muted-foreground">
-                  Add an additional security to your account
-                </p>
-              </div>
-              <div>
-                <Switch />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-red-500">Danger Zone</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <CardTitle>Delete my account</CardTitle>
-                <CardDescription>
-                  Permanently delete the account and remove access from all
-                  workspaces.
-                </CardDescription>
-              </div>
-              <div>
-                <Button variant={"destructive"} onClick={handleDeleteUser}>
-                  Delete Account
-                </Button>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>
