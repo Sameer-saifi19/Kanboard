@@ -157,7 +157,7 @@ export const removeWorkspaceImage = async () => {
   if (!session?.user) return { error: "Not authenticated" };
 
   await prisma.organization.update({
-    where: { id: session.user.id },
+    where: { id: session.session.activeOrganizationId as string},
     data: {
       logo: null,
     },
