@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prod SaaS
+
+**Version 1 (v1)** — A multi-tenant SaaS application with workspace-based organization management.
+
+A full-stack demo app built to showcase authentication, multi-workspace (organization) flows, and modern React/Next.js patterns. Suitable for portfolio or technical interviews.
+
+---
+
+## Tech Stack
+
+| Layer | Technologies |
+|-------|--------------|
+| **Framework** | Next.js 16 (App Router), React 19 |
+| **Language** | TypeScript |
+| **Auth** | [Better Auth](https://www.better-auth.com/) — email/password + Google OAuth, organization plugin |
+| **Database** | PostgreSQL with Prisma ORM |
+| **UI** | Tailwind CSS 4, Radix UI, shadcn/ui, Lucide icons |
+| **Forms & validation** | React Hook Form, Zod |
+| **State** | Zustand |
+| **Media** | Cloudinary (workspace avatars) |
+| **Notifications** | Sonner (toast) |
+
+---
+
+## Features
+
+- **Authentication** — Sign up, sign in, sign out; Google OAuth and email/password
+- **Workspaces (organizations)** — Create, switch, and delete workspaces; each user can belong to multiple workspaces
+- **Workspace settings** — Update name/slug, workspace image (upload/remove via Cloudinary), delete workspace with redirect to first remaining workspace or create-workspace flow
+- **User profile** — Profile page with avatar and editable details
+- **Workspace-scoped routes** — Dashboard layout with sidebar and navbar; routes under `/w/[slug]` (e.g. projects, members, billing, settings)
+- **Create workspace** — Dedicated flow when user has no workspaces; redirect after workspace deletion to first workspace or create-workspace page
+
+---
+
+## Project Structure
+
+```
+├── app/
+│   ├── (main)/          # Authenticated dashboard layout (sidebar, navbar)
+│   │   ├── layout.tsx
+│   │   ├── u/[id]/      # User profile
+│   │   └── w/[slug]/    # Workspace routes (projects, members, billing, settings)
+│   ├── auth/            # Sign in / sign up
+│   ├── create-workspace/
+│   └── ...
+├── components/          # UI components, forms, modals, global (navbar, sidebar, workspace switch)
+├── lib/                 # Auth config, Prisma client, utilities
+├── schema/              # Zod schemas (auth, workspace)
+├── server/              # Server actions (workspace, user)
+└── prisma/              # Schema and migrations
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm
+- PostgreSQL database
+
+### 1. Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env` file in the project root with:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# Database (Prisma)
+DATABASE_URL="postgresql://user:password@localhost:5432/your_db"
 
-## Learn More
+# Better Auth
+BETTER_AUTH_URL="http://localhost:3000"
+BETTER_AUTH_SECRET="your-secret-key"
 
-To learn more about Next.js, take a look at the following resources:
+# Google OAuth (optional)
+GOOGLE_CLIENT_ID="..."
+GOOGLE_CLIENT_SECRET="..."
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Cloudinary (optional, for workspace images)
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="..."
+CLOUDINARY_API_KEY="..."
+CLOUDINARY_API_SECRET="..."
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Database setup
 
-## Deploy on Vercel
+```bash
+pnpm prisma db push
+pnpm prisma generate
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Or use the project script:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm prisma
+```
+
+### 4. Run the app
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). Use **Sign up** or **Sign in** to access the dashboard and workspace flows.
+
+---
+
+## Scripts
+
+| Command | Description |
+|--------|-------------|
+| `pnpm dev` | Start Next.js dev server |
+| `pnpm build` | Production build |
+| `pnpm start` | Start production server |
+| `pnpm prisma` | Push schema and generate Prisma client |
+| `pnpm lint` | Run ESLint |
+
+---
+
+## License
+
+Private / portfolio use.
