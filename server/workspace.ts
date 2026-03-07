@@ -6,7 +6,6 @@ import { createWorkspaceSchemaType } from "@/schema/workspace-schema";
 import { APIError } from "better-auth/api";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 interface Props {
   name: string;

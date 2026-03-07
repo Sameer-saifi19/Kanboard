@@ -69,8 +69,9 @@ export default function SettingsClient({
 
       setPreview(result.url!);
       toast.success("Avatar updated!");
-    } catch (error: any) {
-      toast.error(error.message || "Upload failed");
+    } catch (error) {
+      console.error(error);
+      toast.error("Upload failed");
       setPreview(imageUrl ?? null);
     } finally {
       setIsUploading(false);
@@ -205,7 +206,7 @@ export default function SettingsClient({
                 </div>
                 <div>
                   <p className="text-muted-foreground text-sm">
-                    We support PNG, JPEG's and JPG under 2 MB
+                    We support PNG, JPEG&apos;s and JPG under 2 MB
                   </p>
                 </div>
               </div>

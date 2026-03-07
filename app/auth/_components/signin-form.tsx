@@ -27,7 +27,6 @@ import { GoogleBtn } from "./google-btn";
 import { loginUserWithEmail } from "@/server/user";
 import { toast } from "sonner";
 import Loader from "@/components/global/loader";
-import { authClient } from "@/lib/auth-client";
 
 export default function SigninForm({
   ...props
@@ -36,7 +35,6 @@ export default function SigninForm({
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   
-  const {data: useActiveWorkpace} = authClient.useActiveOrganization()
   const form = useForm<signinSchemaType>({
     resolver: zodResolver(signinSchema),
     defaultValues: {

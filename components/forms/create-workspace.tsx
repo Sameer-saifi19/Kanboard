@@ -65,6 +65,7 @@ export default function CreateWorkspaceForm({
 
         router.push(`/w/${createResult.data?.slug}/projects`);
       } catch (error) {
+        console.log(error)
         toast.error("Something went wrong");
       }
     });
