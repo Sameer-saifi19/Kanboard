@@ -39,7 +39,7 @@ export const createWorkspaceOnSignup = async ({
         error: error.message,
       };
     }
-
+    
     return {
       success: false,
       error: "something went wrong",
