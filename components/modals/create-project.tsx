@@ -72,7 +72,7 @@ export function CreateProjectSheet() {
       <SheetContent
         showCloseButton={false}
         side="right"
-        className="w-full px-4 py-4 sm:max-w-lg overflow-y-auto"
+        className="w-90 px-4 py-4 sm:max-w-lg overflow-y-auto"
       >
         <SheetTitle className="text-xl mt-4 font-semibold">
           Create New Project

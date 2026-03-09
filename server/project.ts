@@ -138,6 +138,9 @@ export const getAllProjects = async () => {
       where: {
         organizationId: session.session.activeOrganizationId as string,
       },
+      orderBy: {
+        createdAt: "desc"
+      }
     });
 
     if (!project) {
@@ -248,7 +251,7 @@ export const updateProject = async (
       return { status: 500, success: false, message: "Error updating project" };
     }
 
-    revalidatePath("/w", "layout");
+    revalidatePath("/w/", "layout");
 
     return {
       status: 200,
