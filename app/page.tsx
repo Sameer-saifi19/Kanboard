@@ -71,8 +71,8 @@ export default function Home() {
     <main className="min-h-screen bg-background text-foreground">
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-gradient-to-br from-primary/25 via-fuchsia-500/15 to-sky-500/15 blur-3xl" />
-          <div className="absolute bottom-[-180px] right-[-180px] h-[520px] w-[520px] rounded-full bg-gradient-to-tr from-emerald-500/10 via-primary/10 to-amber-500/10 blur-3xl" />
+          <div className="absolute -top-24 left-1/2 h-130 w-130 -translate-x-1/2 rounded-full bg-linear-to-br from-primary/25 via-fuchsia-500/15 to-sky-500/15 blur-3xl" />
+          <div className="absolute -bottom-45 -right-45 h-130 w-130 rounded-full bg-linear-to-tr from-emerald-500/10 via-primary/10 to-amber-500/10 blur-3xl" />
         </div>
 
         <header className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
@@ -144,7 +144,7 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="rounded-2xl border bg-card/60 p-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/40">
+              <div className="rounded-2xl border bg-card/60 p-4 shadow-sm backdrop-blur supports-backdrop-filter:bg-card/40">
                 <div className="rounded-xl border bg-background p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -219,7 +219,7 @@ export default function Home() {
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-6 pb-16">
-        <div className="rounded-2xl border bg-card/60 p-8 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/40">
+        <div className="rounded-2xl border bg-card/60 p-8 shadow-sm backdrop-blur supports-backdrop-filter:bg-card/40">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div className="space-y-3">
               <h2 className="text-2xl font-semibold tracking-tight">A clear story in 60 seconds</h2>

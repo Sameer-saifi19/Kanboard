@@ -1,19 +1,9 @@
-import { Button } from "@/components/ui/button";
+import { getAllProjects } from "@/server/project";
 import ProjectClient from "./client";
 import { CreateProjectSheet } from "@/components/modals/create-project";
 
-const projectData = [
-  {
-    name: "project 1",
-    slug: "project-1",
-    id: "1",
-    description: "Tere liye jannate sazayi",
-    createdAt: new Date()
-  }
-]
-
 export default async function Page() {
-
+  const projectData = await getAllProjects()
   return (
     <>
       <main className="flex flex-col gap-6 p-4 w-full max-7-wxl">
@@ -28,7 +18,7 @@ export default async function Page() {
             <CreateProjectSheet/>
           </div>
         </div>
-        <ProjectClient projects={projectData} />
+        <ProjectClient projects={projectData.data ?? []} />
       </main>
     </>
   );

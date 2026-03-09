@@ -87,7 +87,7 @@ export const createProject = async (values: createProjectSchemaType) => {
       };
     }
 
-    revalidatePath(`/w/${session.session.activeOrganizationId}`, "layout");
+    revalidatePath(`/w`, "layout");
     return {
       success: true,
       status: 201,
@@ -119,5 +119,178 @@ export const createProject = async (values: createProjectSchemaType) => {
       status: 500,
       message: "Internal server error",
     };
+  }
+};
+
+export const getAllProjects = async () => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session)
+      return {
+        status: 409,
+        success: false,
+      };
+
+    const project = await prisma.project.findMany({
+      where: {
+        organizationId: session.session.activeOrganizationId as string,
+      },
+    });
+
+    if (!project) {
+      return { status: 404, success: false };
+    }
+
+    return { status: 200, data: project };
+  } catch (error) {
+    console.error(error);
+    return { status: 500, success: false, message: "Internal server error" };
+  }
+};
+
+export const deleteProject = async (projectId: string) => {
+  try {
+    const result = await prisma.project.delete({
+      where: {
+        id: projectId,
+      },
+    });
+
+    if (!result) {
+      return { status: 409, success: false, message: "Cannot delete project" };
+    }
+
+    revalidatePath("/w", "layout");
+    return {
+      status: 200,
+      data: result,
+      message: "Project deleted successfully",
+    };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        status: error.status,
+        message: error.message,
+        code: error.statusCode,
+      };
+    }
+
+    return {
+      success: false,
+      status: 500,
+      message: "Internal server error",
+    };
+  }
+};
+
+export const updateProject = async (
+  projectId: string,
+  values: createProjectSchemaType,
+) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    return {
+      success: false,
+      status: 401,
+      message: "Unauthorized",
+    };
+  }
+
+  const parsed = createProjectSchema.safeParse(values);
+  if (!parsed.success) {
+    return { success: false, message: "Invalid data" };
+  }
+
+  const { name, slug, description } = parsed.data;
+  const normalizeSlug = slug.toLowerCase().trim().replace(/\s+/g, "-");
+
+  try {
+    const checkSlug = await prisma.project.findUnique({
+      where: {
+        slug: normalizeSlug,
+      },
+    });
+
+    if (checkSlug) {
+      return {
+        status: 409,
+        message: "An organization is already exist with this slug",
+      };
+    }
+
+    const findProject = await prisma.project.findFirst({
+      where: {
+        id: projectId,
+      },
+    });
+
+    const result = await prisma.project.update({
+      where: {
+        id: findProject?.id,
+      },
+      data: {
+        name,
+        slug: normalizeSlug,
+        description,
+        organizationId: session.session.activeOrganizationId as string,
+        userId: session.user.id,
+      },
+    });
+
+    if (!result) {
+      return { status: 500, success: false, message: "Error updating project" };
+    }
+
+    revalidatePath("/w", "layout");
+
+    return {
+      status: 200,
+      data: result,
+      message: "Project updated successfully",
+    };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        status: error.status,
+        message: error.message,
+        code: error.statusCode,
+      };
+    }
+
+    return {
+      success: false,
+      status: 500,
+      message: "Internal server error",
+    };
+  }
+};
+
+export const updateProjectTitle = async (projectId: string, title: string) => {
+  try {
+    const updateTitle = await prisma.project.update({
+      where: {
+        id: projectId,
+      },
+      data: {
+        name: title,
+      },
+    });
+
+    if (!updateTitle) {
+      return { success: false };
+    }
+
+    return { success: true, data: updateTitle };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "something went wrong" };
   }
 };
