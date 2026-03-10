@@ -1,7 +1,9 @@
 
 "use client"
 
+import ProjectDetailsDD from "@/components/modals/project-details-dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { updateProjectTitle } from "@/server/project";
 import { useRef, useState } from "react";
@@ -44,16 +46,16 @@ export default function ProjectNavbar({ id, projectName, image }: Props) {
               className="h-7 text-base font-semibold"
             />
           ) : (
-            <h3 className="cursor-pointer" onClick={EditText}>
-              {projectName}
-            </h3>
+            <h3
+  onClick={EditText}
+  className="inline-block cursor-pointer px-2 py-1 rounded-md hover:bg-gray-200 transition"
+>
+  {name}
+</h3>
           )}
         </div>
         <div>
-          <Avatar>
-            <AvatarImage>{image}</AvatarImage>
-            <AvatarFallback></AvatarFallback>
-          </Avatar>
+          <ProjectDetailsDD/>
         </div>
       </div>
     </>
