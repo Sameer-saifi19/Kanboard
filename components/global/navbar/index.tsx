@@ -1,3 +1,5 @@
+'use client'
+
 import { SignOutButton } from "@/app/auth/_components/sign-out";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,9 +14,11 @@ import { authClient } from "@/lib/auth-client";
 import { Moon, Settings, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function DashboardNavbar() {
   const { setTheme } = useTheme();
+  const pathName = usePathname();
   const { data: session } = authClient.useSession();
   const initialName = session?.user.name
     .split(" ")
@@ -26,7 +30,13 @@ export default function DashboardNavbar() {
   return (
     <>
       <nav className="p-4 flex bg-sidebar border-b items-center justify-between sticky top-0 z-10">
-        <SidebarTrigger />
+        {pathName.includes("/u") || pathName.includes("/w") ? (
+          <SidebarTrigger />
+        ) : (
+          <h1 className="uppercase tracking-wider text-primary text-2xl font-extrabold mb-2">
+            Kanboard
+          </h1>
+        )}
         <div className="flex items-center gap-4">
           {/* THEME MENU */}
           <DropdownMenu>
@@ -80,7 +90,10 @@ export default function DashboardNavbar() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Button variant={"outline"} size={"sm"} className="flex">
-                      <Link href={`/u/${session?.user.name.replace(/\s+/g, "-")}/profile`} className="flex items-center gap-2">
+                      <Link
+                        href={`/u/${session?.user.name.replace(/\s+/g, "-")}/profile`}
+                        className="flex items-center gap-2"
+                      >
                         <Settings /> Manage Account
                       </Link>
                     </Button>

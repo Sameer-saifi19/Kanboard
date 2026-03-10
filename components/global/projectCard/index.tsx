@@ -1,4 +1,5 @@
-import ProjectDropdown from "@/components/modals/project-action-dropdown";
+'use client'
+
 import {
   Card,
   CardAction,

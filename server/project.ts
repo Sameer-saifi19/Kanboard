@@ -139,8 +139,8 @@ export const getAllProjects = async () => {
         organizationId: session.session.activeOrganizationId as string,
       },
       orderBy: {
-        createdAt: "desc"
-      }
+        createdAt: "desc",
+      },
     });
 
     if (!project) {
@@ -291,9 +291,30 @@ export const updateProjectTitle = async (projectId: string, title: string) => {
       return { success: false };
     }
 
+    revalidatePath("/p/123","page")
+
     return { success: true, data: updateTitle };
   } catch (error) {
     console.error(error);
     return { success: false, message: "something went wrong" };
+  }
+};
+
+export const getProjectBySlug = async (slug: string) => {
+  try {
+    const data = await prisma.project.findUnique({
+      where: {
+        slug: slug,
+      },
+    });
+
+    if (!data) {
+      return { success: false, message: "No project found" };
+    }
+
+
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, error: error };
   }
 };
