@@ -1,0 +1,46 @@
+"use server";
+
+import prisma from "@/lib/prisma";
+import { APIError } from "better-auth";
+
+export const listMembers = async (slug: string) => {
+
+  try {
+    const data = await prisma.organization.findUnique({
+      where: { slug },
+      include: {
+        members: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!data) {
+      return {
+        status: 500,
+        success: false,
+        message: "Error getting members",
+        data: null,
+      };
+    }
+
+    return { status: 200, success: true, data: data };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        status: error.status,
+        message: error.message,
+        code: error.statusCode,
+      };
+    }
+
+    return {
+      success: false,
+      status: 500,
+      message: "Internal server error",
+    };
+  }
+};

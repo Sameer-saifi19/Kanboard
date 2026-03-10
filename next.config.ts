@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "wallpapers.com"
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com"
       }
     ]
   }

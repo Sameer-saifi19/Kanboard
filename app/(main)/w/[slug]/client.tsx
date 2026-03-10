@@ -1,8 +1,25 @@
 "use client";
 
 import ProjectCard from "@/components/global/projectCard";
-
-import { deleteProject } from "@/server/project";
+import ProjectDropdown from "@/components/modals/project-action-dropdown";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { createProjectSchema } from "@/schema/project-schema";
+import { deleteProject, updateProject } from "@/server/project";
+import { EllipsisVertical } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
