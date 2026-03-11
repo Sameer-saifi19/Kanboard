@@ -84,7 +84,7 @@ export default function ProjectCard({
         <div>
           <Link
             className="flex items-center gap-2 hover:gap-4 transition-all justify-between mb-4"
-            href={`/p/${slug}`}
+            href={`/p/${id}`}
           >
             Go to project <ArrowRight className="h-4 w-4" />
           </Link>

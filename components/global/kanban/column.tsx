@@ -11,19 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ItemSheet from "../item-sheet";
 
 interface KanbanColumnProps {
   column: Column;
   tasks: Task[];
-  onAddTask: (columnId: UniqueIdentifier) => void;
-  onDeleteTask: (id: UniqueIdentifier) => void;
 }
 
 export default function KanbanColumn({
   column,
   tasks,
-  onAddTask,
-  onDeleteTask,
 }: KanbanColumnProps) {
   const taskIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
   const { setNodeRef } = useDroppable({
@@ -39,9 +36,9 @@ export default function KanbanColumn({
             <Badge>{tasks.length}</Badge>
           </div>
           <div>
-            <button onClick={() => onAddTask(column.id)}>
-              <Plus className="h-8 w-8" />
-            </button>
+            <ItemSheet columnId={column.id} trigger={<Button variant={"ghost"}>
+              <Plus className="h-8 w-8"/>
+            </Button>}/>
           </div>
         </div>
         <div ref={setNodeRef} className="flex flex-col flex-1 min-h-0 ">
@@ -53,7 +50,7 @@ export default function KanbanColumn({
               >
                 {tasks.map((task) => (
                   <TaskItem
-                    onDelete={() => onDeleteTask(task.id)}
+                    onDelete={() => {}}
                     task={task}
                     key={task.id}
                   />

@@ -77,6 +77,13 @@ export const createProject = async (values: createProjectSchemaType) => {
         description,
         organizationId: session.session.activeOrganizationId as string,
         userId: session.user.id,
+        columns: {
+          create: [
+            {title: "To Do"},
+            {title: "In Progress"},
+            {title: "Done"}
+          ]
+        }
       },
     });
 

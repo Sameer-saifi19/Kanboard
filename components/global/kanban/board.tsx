@@ -6,26 +6,20 @@ import { Column, Task } from "@/types/kanban";
 import { DndContext, DragOverlay, PointerSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { GripVertical } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
-const COLUMNS: Column[] = [
-  { id: "todo", title: "To Do" },
-  { id: "inprogress", title: "In Progress" },
-  { id: "done", title: "Done" },
-];
+interface Props {
+    columns: Column[],
+}
 
-export default function KanbanBoard() {
-  const [task, setTasks] = useState<Task[]>([]);
+export default function KanbanBoard({columns}: Props) {
+  const [task, setTasks] = useState<Task[]>(() => columns.flatMap((col) => col.tasks));
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [isPending, startTransition] = useTransition()
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   );
-
-  function addTask(ColumnId: UniqueIdentifier) {
-    const newTask: Task = { id: `t-${Date.now()}`, ColumnId, title: "New task" };
-    setTasks((prev) => [...prev, newTask]);
-  }
 
   function deleteTask(id: UniqueIdentifier) {
     setTasks((prev) => prev.filter((t) => t.id !== id));
@@ -42,7 +36,7 @@ export default function KanbanBoard() {
     if (activeId === overId) return;
 
     const isOverTask   = over.data.current?.type === "task";
-    const isOverColumn = COLUMNS.some((c) => c.id === overId);
+    const isOverColumn = columns.some((c) => c.id === overId);
 
     setTasks((prev) => {
       const activeIndex = prev.findIndex((t) => t.id === activeId);
@@ -50,13 +44,13 @@ export default function KanbanBoard() {
       if (isOverTask) {
         const overIndex = prev.findIndex((t) => t.id === overId);
         const updated = [...prev];
-        updated[activeIndex] = { ...updated[activeIndex], ColumnId: updated[overIndex].ColumnId };
+        updated[activeIndex] = { ...updated[activeIndex], columnId: updated[overIndex].columnId };
         return arrayMove(updated, activeIndex, overIndex);
       }
 
       if (isOverColumn) {
         const updated = [...prev];
-        updated[activeIndex] = { ...updated[activeIndex], ColumnId: overId };
+        updated[activeIndex] = { ...updated[activeIndex], columnId: overId };
         return updated;
       }
 
@@ -77,13 +71,11 @@ export default function KanbanBoard() {
           onDragEnd={onDragEnd}
         >
           <div className="flex items-start gap-4 h-full overflow-hidden">
-            {COLUMNS.map((col) => (
+            {columns.map((col) => (
               <KanbanColumn
                 key={col.id}
                 column={col}
-                tasks={task.filter((t) => t.ColumnId === col.id)}
-                onAddTask={addTask}
-                onDeleteTask={deleteTask}
+                tasks={task.filter((t) => t.columnId === col.id)}
               />
             ))}
           </div>

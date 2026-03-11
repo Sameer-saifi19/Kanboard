@@ -1,12 +1,18 @@
-import { UniqueIdentifier } from "@dnd-kit/core"
+export type Task = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  description: string | null; 
+  order: number;
+  columnId: string;
+};
 
 export type Column = {
-  id: UniqueIdentifier,
-  title: string
-}
-
-export type Task = {
-  id: UniqueIdentifier,
-  ColumnId: UniqueIdentifier,
-  title: string
-}
+  id: string;
+  createdAt: Date;
+  upatedAt: Date;  
+  title: string;
+  projectId: string;
+  tasks: Task[];
+};
