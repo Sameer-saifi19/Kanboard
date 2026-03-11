@@ -10,6 +10,7 @@ import TaskItem from "./item";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface KanbanColumnProps {
   column: Column;
@@ -31,41 +32,37 @@ export default function KanbanColumn({
 
   return (
     <>
-        <Card className="max-w-sm w-full">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <CardTitle>
-                  {column.title}
-                </CardTitle>
-                <Badge className="">{tasks.length}</Badge>
-              </div>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-6 w-6 text-slate-400 hover:text-slate-600"
-                onClick={() => onAddTask(column.id)}
+      <div className="max-w-sm w-full flex flex-col gap-2 h-full bg-card rounded-lg p-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <h1>{column.title}</h1>
+            <Badge>{tasks.length}</Badge>
+          </div>
+          <div>
+            <button onClick={() => onAddTask(column.id)}>
+              <Plus className="h-8 w-8" />
+            </button>
+          </div>
+        </div>
+        <div ref={setNodeRef} className="flex flex-col flex-1 min-h-0 ">
+          <ScrollArea className="h-full">
+            <div className="space-y-2">
+              <SortableContext
+                items={taskIds}
+                strategy={verticalListSortingStrategy}
               >
-                <Plus className="h-2 w-2" />
-              </Button>
+                {tasks.map((task) => (
+                  <TaskItem
+                    onDelete={() => onDeleteTask(task.id)}
+                    task={task}
+                    key={task.id}
+                  />
+                ))}
+              </SortableContext>
             </div>
-          </CardHeader>
-          <CardContent ref={setNodeRef} className="space-y-4">
-            <SortableContext
-              items={taskIds}
-              strategy={verticalListSortingStrategy}
-            >
-              {tasks.map((task) => (
-                <TaskItem onDelete={() => {}} task={task} key={task.id} />
-              ))}
-            </SortableContext>
-            {tasks.length === 0 && (
-              <p className="text-xs text-slate-300 text-center mt-6">
-                Drop here
-              </p>
-            )}
-          </CardContent>
-        </Card>
+          </ScrollArea>
+        </div>
+      </div>
     </>
   );
 }

@@ -7,14 +7,6 @@ import { DndContext, DragOverlay, PointerSensor, UniqueIdentifier, useSensor, us
 import { arrayMove } from "@dnd-kit/sortable";
 import { GripVertical } from "lucide-react";
 import { useState } from "react";
-import { createPortal } from "react-dom";
-
-const INITIAL_TASKS: Task[] = [
-  { id: "1", ColumnId: "todo", title: "Design the homepage" },
-  { id: "2", ColumnId: "todo", title: "Write unit tests" },
-  { id: "3", ColumnId: "inprogress", title: "Build auth flow" },
-  { id: "4", ColumnId: "done", title: "Project kickoff" },
-];
 
 const COLUMNS: Column[] = [
   { id: "todo", title: "To Do" },
@@ -23,7 +15,7 @@ const COLUMNS: Column[] = [
 ];
 
 export default function KanbanBoard() {
-  const [task, setTasks] = useState<Task[]>(INITIAL_TASKS);
+  const [task, setTasks] = useState<Task[]>([]);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
@@ -78,14 +70,13 @@ export default function KanbanBoard() {
 
   return (
     <>
-      <div className="min-h-full">
         <DndContext
           sensors={sensors}
           onDragStart={onDragStart}
           onDragOver={onDragOver}
           onDragEnd={onDragEnd}
         >
-          <div className="flex items-start gap-4 w-full">
+          <div className="flex items-start gap-4 h-full overflow-hidden">
             {COLUMNS.map((col) => (
               <KanbanColumn
                 key={col.id}
@@ -111,7 +102,6 @@ export default function KanbanBoard() {
               )}
             </DragOverlay>
         </DndContext>
-      </div>
     </>
   );
 }

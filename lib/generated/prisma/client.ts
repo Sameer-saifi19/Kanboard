@@ -81,3 +81,13 @@ export type Invitation = Prisma.InvitationModel
  * 
  */
 export type Project = Prisma.ProjectModel
+/**
+ * Model Column
+ * 
+ */
+export type Column = Prisma.ColumnModel
+/**
+ * Model Task
+ * 
+ */
+export type Task = Prisma.TaskModel
