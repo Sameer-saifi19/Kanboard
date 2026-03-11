@@ -1,13 +1,12 @@
-export type Status = "todo" | "progress" | "done";
+import { UniqueIdentifier } from "@dnd-kit/core"
 
-export interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  status: Status;
+export type Column = {
+  id: UniqueIdentifier,
+  title: string
 }
 
-export interface Column {
-  id: Status;
-  title: string;
+export type Task = {
+  id: UniqueIdentifier,
+  ColumnId: UniqueIdentifier,
+  title: string
 }

@@ -22,7 +22,7 @@ export default async function ProjectLayout({
             projectName={data?.name as string}
             image={data?.id as string}
           />
-          <div className="px-12 flex items-center justify-center py-8">
+          <div className="px-6 py-4">
             {children}
           </div>
         </main>
