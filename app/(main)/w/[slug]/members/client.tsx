@@ -26,6 +26,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import MemberSwitch from "@/components/global/member-switch";
+import { Trash } from "lucide-react";
 
 type Members = {
   id: string;
@@ -49,15 +51,15 @@ export default function MemberClient({ members }: { members: Members[] }) {
             {/* HEADER */}
             <TableHeader>
               <TableRow className="h-14">
-                <TableHead className="w-25 text-start">Avatar</TableHead>
+                <TableHead className="w-10 border text-start">Avatar</TableHead>
 
-                <TableHead className="w-50">Name</TableHead>
+                <TableHead className="w-20 border">Name</TableHead>
 
-                <TableHead className="min-w-65 max-w-30">Email</TableHead>
+                <TableHead className="w-30 border">Email</TableHead>
 
-                <TableHead className="w-40 text-start">Role</TableHead>
+                <TableHead className="w-25 text-start border">Role</TableHead>
 
-                <TableHead className="w-25 text-end">Action</TableHead>
+                <TableHead className="w-25 text-end border">Action</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -84,15 +86,18 @@ export default function MemberClient({ members }: { members: Members[] }) {
                   </TableCell>
 
                   {/* Role */}
-                  <TableCell className="text-start">{item.role}</TableCell>
+                  <TableCell className="text-center">
+                    <MemberSwitch role={item.role}/>
+                  </TableCell>
 
                   {/* Action */}
                   <TableCell className="text-end">
                     <Button
                       variant="destructive"
+                      size={'icon-lg'}
                       disabled={item.role === "owner"}
                     >
-                      Remove
+                      <Trash/>
                     </Button>
                   </TableCell>
                 </TableRow>
