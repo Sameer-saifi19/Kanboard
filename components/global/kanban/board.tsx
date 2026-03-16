@@ -60,14 +60,19 @@ export default function KanbanBoard({ columns }: Props) {
 
     if (isOverTask) {
       const overIndex = next.findIndex((t) => t.id === overId);
-      next[activeIndex] = { ...next[activeIndex], columnId: next[overIndex].columnId };
+      next[activeIndex] = {
+        ...next[activeIndex],
+        columnId: next[overIndex].columnId,
+      };
       dragStateRef.current = arrayMove(next, activeIndex, overIndex);
     } else if (isOverColumn) {
       next[activeIndex] = { ...next[activeIndex], columnId: overId };
       dragStateRef.current = next;
     }
 
-    updateOptimisticTasks(dragStateRef.current);
+    startTransition(() => {
+      updateOptimisticTasks(dragStateRef.current);
+    });
   }
 
   function onDragEnd({ active, over }: DragEndEvent) {
@@ -98,7 +103,6 @@ export default function KanbanBoard({ columns }: Props) {
     setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
   }
 
-  // Allows child columns to add/delete tasks optimistically
   function handleTaskAdded(task: Task) {
     setTasks((prev) => [...prev, task]);
   }

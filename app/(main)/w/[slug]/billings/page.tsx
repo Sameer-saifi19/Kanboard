@@ -1,4 +1,3 @@
-import { CreateProjectSheet } from "@/components/modals/create-project";
 import BillingClient from "./client";
 export default async function Page() {
   return (

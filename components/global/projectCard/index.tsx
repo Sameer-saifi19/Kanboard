@@ -19,14 +19,12 @@ import { useRef, useState } from "react";
 interface CardProps {
   id: string;
   title: string;
-  slug: string;
   description: string | null;
   createdAt: Date;
 }
 
 export default function ProjectCard({
   id,
-  slug,
   title,
   createdAt,
   description,

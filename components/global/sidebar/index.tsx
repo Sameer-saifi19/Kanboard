@@ -31,7 +31,7 @@ export default function DashboardSidebar({
       <Sidebar collapsible="icon">
         <SidebarHeader className="p-4">
             <Link href={process.env.NEXT_PUBLIC_APP_URL!} className="flex items-center gap-2">
-              <h1 className="uppercase tracking-wider text-primary text-2xl font-extrabold mb-2">
+              <h1 className="uppercase tracking-tighter text-primary text-2xl font-extrabold mb-2">
                 {open ? "Kanboard" : "K"}
               </h1>
             </Link>

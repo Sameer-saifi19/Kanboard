@@ -2,8 +2,6 @@
 "use client"
 
 import ProjectDetailsDD from "@/components/modals/project-details-dropdown";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { updateProjectTitle } from "@/server/project";
 import { useRef, useState } from "react";
@@ -11,10 +9,9 @@ import { useRef, useState } from "react";
 interface Props {
   id: string;
   projectName: string;
-  image: string;
 }
 
-export default function ProjectNavbar({ id, projectName, image }: Props) {
+export default function ProjectNavbar({ id, projectName}: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState(projectName);
@@ -48,7 +45,7 @@ export default function ProjectNavbar({ id, projectName, image }: Props) {
           ) : (
             <h3
   onClick={EditText}
-  className="inline-block cursor-pointer px-2 py-1 rounded-md hover:bg-gray-200 transition"
+  className="inline-block cursor-pointer p-2 rounded-md hover:bg-gray-200/10 transition"
 >
   {name}
 </h3>

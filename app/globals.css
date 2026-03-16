@@ -5,121 +5,327 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
+  /* --- Fonts --- */
+  --font-sans:    var(--font-dm-sans), 'DM Sans', sans-serif;
+  --font-display: var(--font-syne), 'Syne', sans-serif;
+  --font-mono:    'Fira Code', 'SF Mono', monospace;
+
+  /* --- shadcn semantic bridge (unchanged keys, new values) --- */
+  --color-background:         var(--background);
+  --color-foreground:         var(--foreground);
+  --color-card:               var(--card);
+  --color-card-foreground:    var(--card-foreground);
+  --color-popover:            var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --color-primary:            var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary:          var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:              var(--muted);
+  --color-muted-foreground:   var(--muted-foreground);
+  --color-accent:             var(--accent);
+  --color-accent-foreground:  var(--accent-foreground);
+  --color-destructive:        var(--destructive);
+  --color-border:             var(--border);
+  --color-input:              var(--input);
+  --color-ring:               var(--ring);
+
+  /* --- Charts --- */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* --- Sidebar --- */
+  --color-sidebar:                    var(--sidebar);
+  --color-sidebar-foreground:         var(--sidebar-foreground);
+  --color-sidebar-primary:            var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent:             var(--sidebar-accent);
+  --color-sidebar-accent-foreground:  var(--sidebar-accent-foreground);
+  --color-sidebar-border:             var(--sidebar-border);
+  --color-sidebar-ring:               var(--sidebar-ring);
+
+  /* --- Border Radius --- */
+  --radius-sm:  calc(var(--radius) - 4px);
+  --radius-md:  calc(var(--radius) - 2px);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* =============================================
+     TASKFLOW BRAND TOKENS
+     These become bg-brand-*, text-brand-*, etc.
+     ============================================= */
+
+  /* --- Brand (Indigo Blue) --- */
+  --color-brand-50:  #EFF1FB;
+  --color-brand-100: #D6DAF5;
+  --color-brand-200: #A8B2EC;
+  --color-brand-300: #7A87D9;
+  --color-brand-400: #5562C8;
+  --color-brand-500: #3E48A0;
+  --color-brand-600: #2D3568;
+  --color-brand-700: #232952;
+  --color-brand-800: #1A1F3C;
+  --color-brand-900: #111527;
+  --color-brand-950: #0D0F1A;
+
+  /* --- Accents --- */
+  --color-accent-violet:  #7C3AED;
+  --color-accent-cyan:    #06B6D4;
+  --color-accent-rose:    #F43F5E;
+  --color-accent-amber:   #F59E0B;
+  --color-accent-emerald: #10B981;
+
+  /* --- Neutral (replaces default grays) --- */
+  --color-neutral-50:  #F7F7FA;
+  --color-neutral-100: #EBEBEF;
+  --color-neutral-200: #D4D4DB;
+  --color-neutral-300: #B2B2BC;
+  --color-neutral-400: #8A8A96;
+  --color-neutral-500: #5C5C65;
+  --color-neutral-600: #3F3F45;
+  --color-neutral-700: #2C2C30;
+  --color-neutral-800: #1C1C1F;
+  --color-neutral-900: #111113;
+  --color-neutral-950: #0A0A0B;
+
+  /* --- Kanban Status --- */
+  --color-status-todo:       #5562C8;
+  --color-status-inprogress: #06B6D4;
+  --color-status-review:     #F59E0B;
+  --color-status-done:       #10B981;
+  --color-status-blocked:    #F43F5E;
+
+  /* --- Priority --- */
+  --color-priority-critical: #F43F5E;
+  --color-priority-high:     #F59E0B;
+  --color-priority-medium:   #5562C8;
+  --color-priority-low:      #10B981;
+
+  /* --- Shadows --- */
+  --shadow-card:  0 1px 4px rgba(14, 20, 60, 0.06);
+  --shadow-panel: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lift:  0 8px 24px rgba(0, 0, 0, 0.10);
 }
+
+/* ============================================
+   LIGHT MODE — shadcn semantic vars
+   mapped to your Taskflow brand
+   ============================================ */
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Surfaces */
+  --background:         oklch(0.97 0 0);        /* neutral-50 */
+  --foreground:         oklch(0.13 0.02 264);    /* brand-900  */
+  --card:               oklch(1 0 0);
+  --card-foreground:    oklch(0.13 0.02 264);
+  --popover:            oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0.02 264);
+
+  /* Primary → brand-500 #3E48A0 */
+  --primary:            oklch(0.38 0.13 264);
+  --primary-foreground: oklch(1 0 0);
+
+  /* Secondary → brand-50 */
+  --secondary:          oklch(0.95 0.02 264);
+  --secondary-foreground: oklch(0.32 0.10 264);
+
+  /* Muted → neutral-100 */
+  --muted:              oklch(0.93 0 0);
+  --muted-foreground:   oklch(0.52 0 0);
+
+  /* Accent → brand-50 */
+  --accent:             oklch(0.95 0.02 264);
+  --accent-foreground:  oklch(0.32 0.10 264);
+
+  /* Destructive → accent-rose */
+  --destructive:        oklch(0.60 0.22 15);
+
+  /* Borders & Inputs */
+  --border:             oklch(0.88 0.01 264);
+  --input:              oklch(0.88 0.01 264);
+  --ring:               oklch(0.38 0.13 264);    /* brand-500 */
+
+  /* Charts — brand-tinted */
+  --chart-1: oklch(0.38 0.13 264);   /* brand-500  */
+  --chart-2: oklch(0.52 0.16 264);   /* brand-400  */
+  --chart-3: oklch(0.67 0.15 200);   /* accent-cyan */
+  --chart-4: oklch(0.75 0.17 85);    /* accent-amber */
+  --chart-5: oklch(0.63 0.19 15);    /* accent-rose  */
+
+  /* Sidebar → white / brand tones */
+  --sidebar:                    oklch(1 0 0);
+  --sidebar-foreground:         oklch(0.13 0.02 264);
+  --sidebar-primary:            oklch(0.38 0.13 264);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:             oklch(0.95 0.02 264);
+  --sidebar-accent-foreground:  oklch(0.32 0.10 264);
+  --sidebar-border:             oklch(0.88 0.01 264);
+  --sidebar-ring:               oklch(0.38 0.13 264);
 }
 
+/* ============================================
+   DARK MODE
+   ============================================ */
+
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background:         oklch(0.11 0.02 264);    /* brand-950 */
+  --foreground:         oklch(0.95 0.01 264);
+  --card:               oklch(0.16 0.02 264);    /* brand-900 */
+  --card-foreground:    oklch(0.95 0.01 264);
+  --popover:            oklch(0.16 0.02 264);
+  --popover-foreground: oklch(0.95 0.01 264);
+
+  /* Primary → brand-400 (lighter for dark bg) */
+  --primary:            oklch(0.52 0.16 264);
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary:          oklch(0.22 0.05 264);
+  --secondary-foreground: oklch(0.90 0.02 264);
+
+  --muted:              oklch(0.20 0.02 264);
+  --muted-foreground:   oklch(0.60 0.02 264);
+
+  --accent:             oklch(0.22 0.05 264);
+  --accent-foreground:  oklch(0.90 0.02 264);
+
+  --destructive:        oklch(0.65 0.20 15);
+
+  --border:             oklch(1 0 0 / 10%);
+  --input:              oklch(1 0 0 / 15%);
+  --ring:               oklch(0.52 0.16 264);
+
+  /* Charts */
+  --chart-1: oklch(0.52 0.16 264);
+  --chart-2: oklch(0.67 0.15 200);
+  --chart-3: oklch(0.75 0.17 85);
+  --chart-4: oklch(0.63 0.19 15);
+  --chart-5: oklch(0.72 0.18 150);
+
+  /* Sidebar */
+  --sidebar:                    oklch(0.16 0.02 264);
+  --sidebar-foreground:         oklch(0.95 0.01 264);
+  --sidebar-primary:            oklch(0.52 0.16 264);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:             oklch(0.22 0.05 264);
+  --sidebar-accent-foreground:  oklch(0.90 0.02 264);
+  --sidebar-border:             oklch(1 0 0 / 10%);
+  --sidebar-ring:               oklch(0.52 0.16 264);
 }
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
 
 @layer base {
   * {
-    @apply border-border outline-ring/50 font-sans;
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+/* ============================================
+   TASKFLOW COMPONENT CLASSES
+   ============================================ */
+
+@layer components {
+
+  /* --- Typography scale --- */
+  
+  /* --- Status badges --- */
+  .badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 500;
+    border-width: 0.5px;
+    border-style: solid;
+    white-space: nowrap;
+  }
+  .badge-todo       { background: #EFF1FB; color: #2D3568; border-color: #A8B2EC; }
+  .badge-inprogress { background: #ECFEFF; color: #0E7490; border-color: #A5F3FC; }
+  .badge-review     { background: #FFFBEB; color: #92400E; border-color: #FDE68A; }
+  .badge-done       { background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }
+  .badge-blocked    { background: #FFF1F2; color: #9F1239; border-color: #FECDD3; }
+
+  /* --- Priority flags --- */
+  .badge-priority {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .priority-critical { background: #FFF1F2; color: #BE123C; }
+  .priority-high     { background: #FFFBEB; color: #B45309; }
+  .priority-medium   { background: #EFF1FB; color: #232952; }
+  .priority-low      { background: #F0FDF4; color: #15803D; }
+
+  /* --- Kanban column --- */
+  .kanban-col {
+    background: #F7F7FA;
+    border: 0.5px solid #D4D4DB;
+    border-radius: 16px;
+    padding: 12px;
+    min-width: 280px;
+    width: 280px;
+    min-height: 120px;
+    transition: outline 0.15s, background 0.15s;
+  }
+  .kanban-col-drag-over {
+    outline: 2px solid #5562C8;
+    outline-offset: 2px;
+    background: #EFF1FB;
+  }
+
+  /* --- Kanban card --- */
+  .kanban-card {
+    background: white;
+    border: 0.5px solid #D4D4DB;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-card);
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .kanban-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-panel);
+  }
+  .kanban-card:active  { cursor: grabbing; }
+  .kanban-card-dragging {
+    opacity: 0.45;
+    transform: rotate(1.5deg) scale(1.02);
+    cursor: grabbing;
+  }
+
+  /* Status left-border accent on cards */
+  .kanban-card[data-status="inprogress"] { border-left: 2.5px solid #06B6D4; }
+  .kanban-card[data-status="review"]     { border-left: 2.5px solid #F59E0B; }
+  .kanban-card[data-status="blocked"]    { border-left: 2.5px solid #F43F5E; }
+  .kanban-card[data-status="done"]       { opacity: 0.7; }
 }

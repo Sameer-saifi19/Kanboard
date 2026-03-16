@@ -9,7 +9,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import SigninForm from "@/app/auth/_components/signin-form";
 import { Button } from "../ui/button";
 
 export default function ProjectDetailsDD() {

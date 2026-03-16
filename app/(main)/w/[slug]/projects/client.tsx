@@ -2,10 +2,6 @@
 
 import ProjectCard from "@/components/global/projectCard";
 
-import { deleteProject } from "@/server/project";
-import Link from "next/link";
-import { toast } from "sonner";
-
 type Projects = {
   id: string;
   name: string;
@@ -15,15 +11,7 @@ type Projects = {
 };
 
 export default function ProjectClient({ projects }: { projects: Projects[] }) {
-  async function handleDelete(projectId: string) {
-    const deleteOne = await deleteProject(projectId);
-    if (!deleteOne.success) {
-      toast.error("Error deleting project");
-      return;
-    }
-
-    toast.success("Project deleted");
-  }
+  
 
   return (
     <>
@@ -34,7 +22,6 @@ export default function ProjectClient({ projects }: { projects: Projects[] }) {
                 key={item.id}
                 id={item.id}
                 description={item.description ?? ""}
-                slug={item.slug}
                 createdAt={item.createdAt}
                 title={item.name}
               />

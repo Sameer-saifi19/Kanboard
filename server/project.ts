@@ -307,11 +307,11 @@ export const updateProjectTitle = async (projectId: string, title: string) => {
   }
 };
 
-export const getProjectBySlug = async (slug: string) => {
+export const getProjectById = async (id: string) => {
   try {
     const data = await prisma.project.findUnique({
       where: {
-        slug: slug,
+        id: id,
       },
     });
 

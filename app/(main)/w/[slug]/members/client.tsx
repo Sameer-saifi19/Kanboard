@@ -68,7 +68,7 @@ export default function MemberClient({ members }: { members: Members[] }) {
                   {/* Avatar */}
                   <TableCell className="text-center">
                     <Image
-                      src={item.image}
+                      src={item.image ?? null}
                       height={30}
                       width={30}
                       alt="member avatar"

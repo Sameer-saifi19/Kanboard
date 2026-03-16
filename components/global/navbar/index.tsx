@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { SignOutButton } from "@/app/auth/_components/sign-out";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,9 +33,11 @@ export default function DashboardNavbar() {
         {pathName.includes("/u") || pathName.includes("/w") ? (
           <SidebarTrigger />
         ) : (
-          <h1 className="uppercase tracking-wider text-primary text-2xl font-extrabold mb-2">
-            Kanboard
-          </h1>
+          <Link href={"/w"}>
+            <h1 className="uppercase text-primary text-2xl font-extrabold mb-2">
+              Kanboard
+            </h1>
+          </Link>
         )}
         <div className="flex items-center gap-4">
           {/* THEME MENU */}

@@ -1,6 +1,5 @@
 import { listMembers } from "@/server/member";
 import MemberClient from "./client";
-import { Button } from "@/components/ui/button";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const { slug } = await params;
