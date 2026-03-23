@@ -77,13 +77,7 @@ export default function Home() {
 
         <header className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
           <div className="flex items-center gap-3">
-            <div className="grid size-10 place-items-center rounded-xl border bg-card shadow-sm">
-              <Sparkles className="size-5 text-primary" />
-            </div>
-            <div className="leading-tight">
-              <div className="text-sm font-semibold tracking-wide">Prod SaaS</div>
-              <div className="text-xs text-muted-foreground">v1</div>
-            </div>
+              <h1 className="text-3xl uppercase font-bold tracking-tighter">Kanboard</h1>
           </div>
 
           <nav className="flex items-center gap-2">
@@ -111,7 +105,7 @@ export default function Home() {
               </h1>
 
               <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
-                Prod SaaS is a Next.js app that demonstrates real SaaS fundamentals: organizations
+                kanboard is a Next.js app that demonstrates real SaaS fundamentals: organizations
                 (workspaces), settings, members, and a modern UI layer — designed to be easy to
                 explain in an interview and extend in production.
               </p>
@@ -250,7 +244,7 @@ export default function Home() {
       <footer className="mx-auto w-full max-w-6xl px-6 pb-10">
         <div className="flex flex-col items-start justify-between gap-4 border-t pt-6 sm:flex-row sm:items-center">
           <div className="text-sm text-muted-foreground">
-            Prod SaaS <span className="text-foreground/70">v1</span> — built with Next.js, Better
+            Kanboard <span className="text-foreground/70">v1</span> — built with Next.js, Better
             Auth, Prisma, and Tailwind.
           </div>
           <div className="flex items-center gap-2">

@@ -19,7 +19,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Kanboard",
+  title: "Kanboard - Multi tenant Project management Saas",
 };
 
 export default function RootLayout({
